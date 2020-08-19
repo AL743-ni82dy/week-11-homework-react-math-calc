@@ -3,6 +3,7 @@ import NumberInput from './NumberInput'
 import OperatorSelect from './OperatorSelect'
 import Equal from './Equal.js'
 import SolveEquation from './SolveEquation'
+import ErrorMessage from './ErrorMessage'
 import './Input.css'
 
 class Calculator extends React.Component {
@@ -11,7 +12,7 @@ class Calculator extends React.Component {
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleOperatorChange = this.handleOperatorChange.bind(this);
       this.handleClick = this.handleClick.bind(this);
-      this.state = {inputOne: '', operator: '+', inputTwo: '', answer: ''}
+      this.state = {inputOne: '', operator: '+', inputTwo: '', answer: '', errorMessage: ''}
     }
 
     handleInputChange(input, id) {
@@ -31,13 +32,9 @@ class Calculator extends React.Component {
       let inputB=parseInt(this.state.inputTwo)
       let op=this.state.operator
       let answ = 0;
-      if (isNaN(inputA) ) {
-        this.setState({inputOne: ''})
+      if (isNaN(inputA) || isNaN(inputB)) {
         this.setState({answer: ''})
-      } else if (isNaN(inputB) ) {
-        this.setState({inputTwo: ''})
-        this.setState({answer: ''})
-//        "Please provide a valid number for both operands"
+        this.setState({errorMessage: 'Please provide a valid number for both operands'})
       } else {
         switch (op) {
           case '+':
@@ -55,6 +52,7 @@ class Calculator extends React.Component {
           default:
         }
       this.setState({answer: answ})
+      this.setState({errorMessage: ''})
     }
   }
 
@@ -63,6 +61,7 @@ class Calculator extends React.Component {
       const inputTwo=this.state.inputTwo;
         return (
             <div>
+              <fieldset>
                 <NumberInput id = "1" value={inputOne}
                 onInputChange={this.handleInputChange}/>
                 <OperatorSelect 
@@ -72,6 +71,10 @@ class Calculator extends React.Component {
                 <button type="button" onClick={this.handleClick}>=</button>
                 <SolveEquation 
                 answer = {this.state.answer}
+                />
+                </fieldset>
+                <ErrorMessage
+                message = {this.state.errorMessage}
                 />
             </div>
         )
