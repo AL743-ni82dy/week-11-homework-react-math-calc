@@ -10,6 +10,7 @@ class Calculator extends React.Component {
       super(props);
       this.handleInputChange = this.handleInputChange.bind(this);
       this.handleOperatorChange = this.handleOperatorChange.bind(this);
+      this.handleClick = this.handleClick.bind(this);
       this.state = {inputOne: '', operator: '+', inputTwo: '', answer: ''}
     }
 
@@ -25,6 +26,38 @@ class Calculator extends React.Component {
       this.setState({operator})
     }
 
+    handleClick() {
+      let inputA=parseInt(this.state.inputOne)
+      let inputB=parseInt(this.state.inputTwo)
+      let op=this.state.operator
+      let answ = 0;
+      if (isNaN(inputA) ) {
+        this.setState({inputOne: ''})
+        this.setState({answer: ''})
+      } else if (isNaN(inputB) ) {
+        this.setState({inputTwo: ''})
+        this.setState({answer: ''})
+//        "Please provide a valid number for both operands"
+      } else {
+        switch (op) {
+          case '+':
+            answ = inputA + inputB
+          break;
+          case '-':
+            answ = inputA - inputB
+          break;
+          case '*':
+            answ = inputA * inputB
+          break;
+           case '/':
+            answ = inputA / inputB
+          break;
+          default:
+        }
+      this.setState({answer: answ})
+    }
+  }
+
     render () {
       const inputOne=this.state.inputOne;
       const inputTwo=this.state.inputTwo;
@@ -36,7 +69,7 @@ class Calculator extends React.Component {
                 onOperatorChange={this.handleOperatorChange}/>
                 <NumberInput id = "2" value={inputTwo}
                 onInputChange={this.handleInputChange}/>
-                <Equal />
+                <button type="button" onClick={this.handleClick}>=</button>
                 <SolveEquation 
                 answer = {this.state.answer}
                 />
